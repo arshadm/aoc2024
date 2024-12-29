@@ -6,23 +6,23 @@ import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
-class Task1Test {
+class Task2Test {
     static final Pattern ENTRY_PATTER = Pattern.compile("(\\d+)[ ]+(\\d+)");
 
     @Test
-    public void Task1aTest() {
-        var distance = Task1.computeDistance(DataHelper.readLines("/problem01/task1a_data.txt")
-                .map(Task1Test::readLine));
+    public void Task2aTest() {
+        var distance = Task2.computeDistance(DataHelper.readLines("/problem01/task1a_data.txt")
+                .map(Task2Test::readLine));
 
-        Assertions.assertEquals(11, distance);
+        Assertions.assertEquals(31, distance);
     }
 
     @Test
-    public void Task1bTest() {
-        var distance = Task1.computeDistance(DataHelper.readLines("/problem01/task1b_data.txt")
-                .map(Task1Test::readLine));
+    public void Task2bTest() {
+        var distance = Task2.computeDistance(DataHelper.readLines("/problem01/task1b_data.txt")
+                .map(Task2Test::readLine));
 
-        Assertions.assertEquals(3246517, distance);
+        Assertions.assertEquals(29379307, distance);
     }
 
     private static Entry readLine(String line) {
