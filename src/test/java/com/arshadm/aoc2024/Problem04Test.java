@@ -16,7 +16,7 @@ class Problem04Test {
   @Test
   public void Task1bTest() throws IOException {
     var value = Problem04.computePart1("/problem04/task1b_data.txt");
-    assertEquals(0, value);
+    assertEquals(2500, value);
   }
 
   @Test
@@ -28,6 +28,6 @@ class Problem04Test {
   @Test
   public void Task2bTest() throws IOException {
     var value = Problem04.computePart2("/problem04/task1b_data.txt");
-    assertEquals(0, value);
+    assertEquals(1933, value);
   }
 }
