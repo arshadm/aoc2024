@@ -26,7 +26,6 @@ class Problem02Test {
   @Test
   public void Task2bTest() {
     var value = Problem02.computePart2("/problem02/taskb_data.txt");
-    assertEquals(4, value);
+    assertEquals(601, value);
   }
-
 }

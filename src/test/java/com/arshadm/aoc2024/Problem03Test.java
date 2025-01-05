@@ -29,7 +29,7 @@ class Problem03Test {
   @Test
   public void Task2bTest() throws IOException {
     var value = Problem03.computePart2("/problem03/task1b_data.txt");
-    assertEquals(128670117, value);
+    assertEquals(127092535, value);
   }
 
 }

@@ -9,31 +9,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class Problem05 {
-  record Data(Map<Integer, Set<Integer>> ordering, List<List<Integer>> pages) {
+  record Data(Map<Integer, Set<Integer>> ordering, List<List<Integer>> updates) {
     public long computePart1() {
-      var ordered = pages.stream().filter(page -> {
-        for (var i = 0; i < page.size(); i++) {
-          var p1 = page.get(i);
-
-          for (var j = i + 1; j < page.size(); j++) {
-            var p2 = page.get(j);
-
-            if (ordering.containsKey(p1)) {
-              if (!ordering.get(p1).contains(p2)) {
-                return false;
-              }
-            } else if (ordering.containsKey(p2)) {
-              if (ordering.get(p2).contains(p1)) {
-                return false;
-              }
-            }
-          }
-        }
-
-        return true;
-      }).toList();
+      var ordered = updates.stream().filter(this::isCorrectOrder).toList();
 
       var middlePages = new ArrayList<Integer>();
       for (var pages : ordered) {
@@ -44,45 +25,31 @@ public class Problem05 {
     }
 
     public long computePart2() {
-      var notOrdered = pages.stream().filter(page -> {
-        for (var i = 0; i < page.size(); i++) {
-          var p1 = page.get(i);
+      var notOrdered = updates.stream().filter(Predicate.not(this::isCorrectOrder)).toList();
 
-          for (var j = i + 1; j < page.size(); j++) {
-            var p2 = page.get(j);
+      var fixedPages = notOrdered.stream().map(pages -> {
+        var hasChanged = false;
+        var fixed = new ArrayList<>(pages);
 
-            if (ordering.containsKey(p1)) {
-              if (!ordering.get(p1).contains(p2)) {
-                return true;
-              }
-            } else if (ordering.containsKey(p2)) {
-              if (ordering.get(p2).contains(p1)) {
-                return true;
-              }
-            }
-          }
-        }
+        do {
+          hasChanged = false;
 
-        return false;
-      }).toList();
+          for (var i = 0; i < fixed.size(); i++) {
+            var p1 = fixed.get(i);
+            for (var j = i + 1; j < fixed.size(); j++) {
+              var p2 = fixed.get(j);
 
-      var fixedPages = notOrdered.stream().map(page -> {
-        var fixed = new ArrayList<>(page);
-
-        for (var i = 0; i < fixed.size(); i++) {
-          var p1 = fixed.get(i);
-          for (var j=i+1; j<fixed.size(); j++) {
-            var p2 = fixed.get(j);
-
-            if (ordering.containsKey(p2)) {
-              if (ordering.get(p2).contains(p1)) {
-                fixed.set(i, p2);
-                fixed.set(i + 1, p1);
-                p1 = p2;
+              if (ordering.containsKey(p2)) {
+                if (ordering.get(p2).contains(p1)) {
+                  hasChanged = true;
+                  fixed.set(i, p2);
+                  fixed.set(j, p1);
+                  break;
+                }
               }
             }
           }
-        }
+        } while (hasChanged);
 
         return fixed;
       }).toList();
@@ -96,6 +63,28 @@ public class Problem05 {
       }
 
       return middlePages.stream().mapToInt(i -> i).sum();
+    }
+
+    private boolean isCorrectOrder(List<Integer> pages) {
+      for (var i = 0; i < pages.size(); i++) {
+        var p1 = pages.get(i);
+
+        for (var j = i + 1; j < pages.size(); j++) {
+          var p2 = pages.get(j);
+
+          if (ordering.containsKey(p1)) {
+            if (!ordering.get(p1).contains(p2)) {
+              return false;
+            }
+          } else if (ordering.containsKey(p2)) {
+            if (ordering.get(p2).contains(p1)) {
+              return false;
+            }
+          }
+        }
+      }
+
+      return true;
     }
   }
 
